@@ -131,6 +131,48 @@ abstract class DurationQueryDocumentReference
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    DurationQuery model, {
+    SetOptions? options,
+    FieldValue durationFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    DurationQuery model, {
+    SetOptions? options,
+    FieldValue durationFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    DurationQuery model, {
+    SetOptions? options,
+    FieldValue durationFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -145,6 +187,15 @@ abstract class DurationQueryDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    Duration duration,
+    FieldValue durationFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
     Duration duration,
     FieldValue durationFieldValue,
   });
@@ -177,6 +228,54 @@ class _$DurationQueryDocumentReference extends FirestoreDocumentReference<
   Future<DurationQueryDocumentSnapshot> transactionGet(
       Transaction transaction) {
     return transaction.get(reference).then(DurationQueryDocumentSnapshot._);
+  }
+
+  Future<void> set(
+    DurationQuery model, {
+    SetOptions? options,
+    FieldValue? durationFieldValue,
+  }) async {
+    final json = {
+      ..._$DurationQueryToJson(model),
+      if (durationFieldValue != null)
+        _$DurationQueryFieldMap['duration']!: durationFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    DurationQuery model, {
+    SetOptions? options,
+    FieldValue? durationFieldValue,
+  }) {
+    final json = {
+      ..._$DurationQueryToJson(model),
+      if (durationFieldValue != null)
+        _$DurationQueryFieldMap['duration']!: durationFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    DurationQuery model, {
+    SetOptions? options,
+    FieldValue? durationFieldValue,
+  }) {
+    final json = {
+      ..._$DurationQueryToJson(model),
+      if (durationFieldValue != null)
+        _$DurationQueryFieldMap['duration']!: durationFieldValue,
+    };
+
+    batch.set(reference, json, options);
   }
 
   Future<void> update({
@@ -216,6 +315,26 @@ class _$DurationQueryDocumentReference extends FirestoreDocumentReference<
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? duration = _sentinel,
+    FieldValue? durationFieldValue,
+  }) {
+    assert(
+      duration == _sentinel || durationFieldValue == null,
+      "Cannot specify both duration and durationFieldValue",
+    );
+    final json = {
+      if (duration != _sentinel)
+        _$DurationQueryFieldMap['duration']!:
+            _$DurationQueryPerFieldToJson.duration(duration as Duration),
+      if (durationFieldValue != null)
+        _$DurationQueryFieldMap['duration']!: durationFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override
@@ -942,6 +1061,48 @@ abstract class DateTimeQueryDocumentReference
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    DateTimeQuery model, {
+    SetOptions? options,
+    FieldValue timeFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    DateTimeQuery model, {
+    SetOptions? options,
+    FieldValue timeFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    DateTimeQuery model, {
+    SetOptions? options,
+    FieldValue timeFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -956,6 +1117,15 @@ abstract class DateTimeQueryDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    DateTime time,
+    FieldValue timeFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
     DateTime time,
     FieldValue timeFieldValue,
   });
@@ -988,6 +1158,54 @@ class _$DateTimeQueryDocumentReference extends FirestoreDocumentReference<
   Future<DateTimeQueryDocumentSnapshot> transactionGet(
       Transaction transaction) {
     return transaction.get(reference).then(DateTimeQueryDocumentSnapshot._);
+  }
+
+  Future<void> set(
+    DateTimeQuery model, {
+    SetOptions? options,
+    FieldValue? timeFieldValue,
+  }) async {
+    final json = {
+      ..._$DateTimeQueryToJson(model),
+      if (timeFieldValue != null)
+        _$DateTimeQueryFieldMap['time']!: timeFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    DateTimeQuery model, {
+    SetOptions? options,
+    FieldValue? timeFieldValue,
+  }) {
+    final json = {
+      ..._$DateTimeQueryToJson(model),
+      if (timeFieldValue != null)
+        _$DateTimeQueryFieldMap['time']!: timeFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    DateTimeQuery model, {
+    SetOptions? options,
+    FieldValue? timeFieldValue,
+  }) {
+    final json = {
+      ..._$DateTimeQueryToJson(model),
+      if (timeFieldValue != null)
+        _$DateTimeQueryFieldMap['time']!: timeFieldValue,
+    };
+
+    batch.set(reference, json, options);
   }
 
   Future<void> update({
@@ -1027,6 +1245,26 @@ class _$DateTimeQueryDocumentReference extends FirestoreDocumentReference<
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? time = _sentinel,
+    FieldValue? timeFieldValue,
+  }) {
+    assert(
+      time == _sentinel || timeFieldValue == null,
+      "Cannot specify both time and timeFieldValue",
+    );
+    final json = {
+      if (time != _sentinel)
+        _$DateTimeQueryFieldMap['time']!:
+            _$DateTimeQueryPerFieldToJson.time(time as DateTime),
+      if (timeFieldValue != null)
+        _$DateTimeQueryFieldMap['time']!: timeFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override
@@ -1755,6 +1993,48 @@ abstract class TimestampQueryDocumentReference
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    TimestampQuery model, {
+    SetOptions? options,
+    FieldValue timeFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    TimestampQuery model, {
+    SetOptions? options,
+    FieldValue timeFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    TimestampQuery model, {
+    SetOptions? options,
+    FieldValue timeFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -1769,6 +2049,15 @@ abstract class TimestampQueryDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    Timestamp time,
+    FieldValue timeFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
     Timestamp time,
     FieldValue timeFieldValue,
   });
@@ -1801,6 +2090,54 @@ class _$TimestampQueryDocumentReference extends FirestoreDocumentReference<
   Future<TimestampQueryDocumentSnapshot> transactionGet(
       Transaction transaction) {
     return transaction.get(reference).then(TimestampQueryDocumentSnapshot._);
+  }
+
+  Future<void> set(
+    TimestampQuery model, {
+    SetOptions? options,
+    FieldValue? timeFieldValue,
+  }) async {
+    final json = {
+      ..._$TimestampQueryToJson(model),
+      if (timeFieldValue != null)
+        _$TimestampQueryFieldMap['time']!: timeFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    TimestampQuery model, {
+    SetOptions? options,
+    FieldValue? timeFieldValue,
+  }) {
+    final json = {
+      ..._$TimestampQueryToJson(model),
+      if (timeFieldValue != null)
+        _$TimestampQueryFieldMap['time']!: timeFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    TimestampQuery model, {
+    SetOptions? options,
+    FieldValue? timeFieldValue,
+  }) {
+    final json = {
+      ..._$TimestampQueryToJson(model),
+      if (timeFieldValue != null)
+        _$TimestampQueryFieldMap['time']!: timeFieldValue,
+    };
+
+    batch.set(reference, json, options);
   }
 
   Future<void> update({
@@ -1840,6 +2177,26 @@ class _$TimestampQueryDocumentReference extends FirestoreDocumentReference<
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? time = _sentinel,
+    FieldValue? timeFieldValue,
+  }) {
+    assert(
+      time == _sentinel || timeFieldValue == null,
+      "Cannot specify both time and timeFieldValue",
+    );
+    final json = {
+      if (time != _sentinel)
+        _$TimestampQueryFieldMap['time']!:
+            _$TimestampQueryPerFieldToJson.time(time as Timestamp),
+      if (timeFieldValue != null)
+        _$TimestampQueryFieldMap['time']!: timeFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override
@@ -2569,6 +2926,48 @@ abstract class GeoPointQueryDocumentReference
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    GeoPointQuery model, {
+    SetOptions? options,
+    FieldValue pointFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    GeoPointQuery model, {
+    SetOptions? options,
+    FieldValue pointFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    GeoPointQuery model, {
+    SetOptions? options,
+    FieldValue pointFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -2583,6 +2982,15 @@ abstract class GeoPointQueryDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    GeoPoint point,
+    FieldValue pointFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
     GeoPoint point,
     FieldValue pointFieldValue,
   });
@@ -2615,6 +3023,54 @@ class _$GeoPointQueryDocumentReference extends FirestoreDocumentReference<
   Future<GeoPointQueryDocumentSnapshot> transactionGet(
       Transaction transaction) {
     return transaction.get(reference).then(GeoPointQueryDocumentSnapshot._);
+  }
+
+  Future<void> set(
+    GeoPointQuery model, {
+    SetOptions? options,
+    FieldValue? pointFieldValue,
+  }) async {
+    final json = {
+      ..._$GeoPointQueryToJson(model),
+      if (pointFieldValue != null)
+        _$GeoPointQueryFieldMap['point']!: pointFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    GeoPointQuery model, {
+    SetOptions? options,
+    FieldValue? pointFieldValue,
+  }) {
+    final json = {
+      ..._$GeoPointQueryToJson(model),
+      if (pointFieldValue != null)
+        _$GeoPointQueryFieldMap['point']!: pointFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    GeoPointQuery model, {
+    SetOptions? options,
+    FieldValue? pointFieldValue,
+  }) {
+    final json = {
+      ..._$GeoPointQueryToJson(model),
+      if (pointFieldValue != null)
+        _$GeoPointQueryFieldMap['point']!: pointFieldValue,
+    };
+
+    batch.set(reference, json, options);
   }
 
   Future<void> update({
@@ -2654,6 +3110,26 @@ class _$GeoPointQueryDocumentReference extends FirestoreDocumentReference<
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? point = _sentinel,
+    FieldValue? pointFieldValue,
+  }) {
+    assert(
+      point == _sentinel || pointFieldValue == null,
+      "Cannot specify both point and pointFieldValue",
+    );
+    final json = {
+      if (point != _sentinel)
+        _$GeoPointQueryFieldMap['point']!:
+            _$GeoPointQueryPerFieldToJson.point(point as GeoPoint),
+      if (pointFieldValue != null)
+        _$GeoPointQueryFieldMap['point']!: pointFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override
@@ -3385,6 +3861,48 @@ abstract class DocumentReferenceQueryDocumentReference
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    DocumentReferenceQuery model, {
+    SetOptions? options,
+    FieldValue refFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    DocumentReferenceQuery model, {
+    SetOptions? options,
+    FieldValue refFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    DocumentReferenceQuery model, {
+    SetOptions? options,
+    FieldValue refFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -3399,6 +3917,15 @@ abstract class DocumentReferenceQueryDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    DocumentReference<Map<String, dynamic>> ref,
+    FieldValue refFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
     DocumentReference<Map<String, dynamic>> ref,
     FieldValue refFieldValue,
   });
@@ -3436,6 +3963,54 @@ class _$DocumentReferenceQueryDocumentReference
     return transaction
         .get(reference)
         .then(DocumentReferenceQueryDocumentSnapshot._);
+  }
+
+  Future<void> set(
+    DocumentReferenceQuery model, {
+    SetOptions? options,
+    FieldValue? refFieldValue,
+  }) async {
+    final json = {
+      ..._$DocumentReferenceQueryToJson(model),
+      if (refFieldValue != null)
+        _$DocumentReferenceQueryFieldMap['ref']!: refFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    DocumentReferenceQuery model, {
+    SetOptions? options,
+    FieldValue? refFieldValue,
+  }) {
+    final json = {
+      ..._$DocumentReferenceQueryToJson(model),
+      if (refFieldValue != null)
+        _$DocumentReferenceQueryFieldMap['ref']!: refFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    DocumentReferenceQuery model, {
+    SetOptions? options,
+    FieldValue? refFieldValue,
+  }) {
+    final json = {
+      ..._$DocumentReferenceQueryToJson(model),
+      if (refFieldValue != null)
+        _$DocumentReferenceQueryFieldMap['ref']!: refFieldValue,
+    };
+
+    batch.set(reference, json, options);
   }
 
   Future<void> update({
@@ -3477,6 +4052,27 @@ class _$DocumentReferenceQueryDocumentReference
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? ref = _sentinel,
+    FieldValue? refFieldValue,
+  }) {
+    assert(
+      ref == _sentinel || refFieldValue == null,
+      "Cannot specify both ref and refFieldValue",
+    );
+    final json = {
+      if (ref != _sentinel)
+        _$DocumentReferenceQueryFieldMap['ref']!:
+            _$DocumentReferenceQueryPerFieldToJson
+                .ref(ref as DocumentReference<Map<String, dynamic>>),
+      if (refFieldValue != null)
+        _$DocumentReferenceQueryFieldMap['ref']!: refFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override
@@ -4111,7 +4707,7 @@ class DocumentReferenceQueryQueryDocumentSnapshot
 
 DurationQuery _$DurationQueryFromJson(Map<String, dynamic> json) =>
     DurationQuery(
-      Duration(microseconds: json['duration'] as int),
+      Duration(microseconds: (json['duration'] as num).toInt()),
     );
 
 const _$DurationQueryFieldMap = <String, String>{

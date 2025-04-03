@@ -124,6 +124,51 @@ abstract class PersonDocumentReference
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    Person model, {
+    SetOptions? options,
+    FieldValue firstNameFieldValue,
+    FieldValue lastNameFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    Person model, {
+    SetOptions? options,
+    FieldValue firstNameFieldValue,
+    FieldValue lastNameFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    Person model, {
+    SetOptions? options,
+    FieldValue firstNameFieldValue,
+    FieldValue lastNameFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -140,6 +185,17 @@ abstract class PersonDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    String firstName,
+    FieldValue firstNameFieldValue,
+    String lastName,
+    FieldValue lastNameFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
     String firstName,
     FieldValue firstNameFieldValue,
     String lastName,
@@ -173,6 +229,63 @@ class _$PersonDocumentReference
   @override
   Future<PersonDocumentSnapshot> transactionGet(Transaction transaction) {
     return transaction.get(reference).then(PersonDocumentSnapshot._);
+  }
+
+  Future<void> set(
+    Person model, {
+    SetOptions? options,
+    FieldValue? firstNameFieldValue,
+    FieldValue? lastNameFieldValue,
+  }) async {
+    final json = {
+      ...model.toJson(),
+      if (firstNameFieldValue != null)
+        _$$PersonImplFieldMap['firstName']!: firstNameFieldValue,
+      if (lastNameFieldValue != null)
+        _$$PersonImplFieldMap['lastName']!: lastNameFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    Person model, {
+    SetOptions? options,
+    FieldValue? firstNameFieldValue,
+    FieldValue? lastNameFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (firstNameFieldValue != null)
+        _$$PersonImplFieldMap['firstName']!: firstNameFieldValue,
+      if (lastNameFieldValue != null)
+        _$$PersonImplFieldMap['lastName']!: lastNameFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    Person model, {
+    SetOptions? options,
+    FieldValue? firstNameFieldValue,
+    FieldValue? lastNameFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (firstNameFieldValue != null)
+        _$$PersonImplFieldMap['firstName']!: firstNameFieldValue,
+      if (lastNameFieldValue != null)
+        _$$PersonImplFieldMap['lastName']!: lastNameFieldValue,
+    };
+
+    batch.set(reference, json, options);
   }
 
   Future<void> update({
@@ -234,6 +347,37 @@ class _$PersonDocumentReference
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? firstName = _sentinel,
+    FieldValue? firstNameFieldValue,
+    Object? lastName = _sentinel,
+    FieldValue? lastNameFieldValue,
+  }) {
+    assert(
+      firstName == _sentinel || firstNameFieldValue == null,
+      "Cannot specify both firstName and firstNameFieldValue",
+    );
+    assert(
+      lastName == _sentinel || lastNameFieldValue == null,
+      "Cannot specify both lastName and lastNameFieldValue",
+    );
+    final json = {
+      if (firstName != _sentinel)
+        _$$PersonImplFieldMap['firstName']!:
+            _$$PersonImplPerFieldToJson.firstName(firstName as String),
+      if (firstNameFieldValue != null)
+        _$$PersonImplFieldMap['firstName']!: firstNameFieldValue,
+      if (lastName != _sentinel)
+        _$$PersonImplFieldMap['lastName']!:
+            _$$PersonImplPerFieldToJson.lastName(lastName as String),
+      if (lastNameFieldValue != null)
+        _$$PersonImplFieldMap['lastName']!: lastNameFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override
@@ -1097,6 +1241,48 @@ abstract class PublicRedirectedDocumentReference
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    PublicRedirected model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    PublicRedirected model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    PublicRedirected model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -1111,6 +1297,15 @@ abstract class PublicRedirectedDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    String value,
+    FieldValue valueFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
     String value,
     FieldValue valueFieldValue,
   });
@@ -1143,6 +1338,54 @@ class _$PublicRedirectedDocumentReference extends FirestoreDocumentReference<
   Future<PublicRedirectedDocumentSnapshot> transactionGet(
       Transaction transaction) {
     return transaction.get(reference).then(PublicRedirectedDocumentSnapshot._);
+  }
+
+  Future<void> set(
+    PublicRedirected model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) async {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null)
+        _$$PublicRedirected2ImplFieldMap['value']!: valueFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    PublicRedirected model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null)
+        _$$PublicRedirected2ImplFieldMap['value']!: valueFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    PublicRedirected model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null)
+        _$$PublicRedirected2ImplFieldMap['value']!: valueFieldValue,
+    };
+
+    batch.set(reference, json, options);
   }
 
   Future<void> update({
@@ -1182,6 +1425,26 @@ class _$PublicRedirectedDocumentReference extends FirestoreDocumentReference<
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? value = _sentinel,
+    FieldValue? valueFieldValue,
+  }) {
+    assert(
+      value == _sentinel || valueFieldValue == null,
+      "Cannot specify both value and valueFieldValue",
+    );
+    final json = {
+      if (value != _sentinel)
+        _$$PublicRedirected2ImplFieldMap['value']!:
+            _$$PublicRedirected2ImplPerFieldToJson.value(value as String),
+      if (valueFieldValue != null)
+        _$$PublicRedirected2ImplFieldMap['value']!: valueFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override

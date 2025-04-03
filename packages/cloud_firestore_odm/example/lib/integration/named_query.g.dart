@@ -145,6 +145,48 @@ abstract class ConflictDocumentReference
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    Conflict model, {
+    SetOptions? options,
+    FieldValue numberFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    Conflict model, {
+    SetOptions? options,
+    FieldValue numberFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    Conflict model, {
+    SetOptions? options,
+    FieldValue numberFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -159,6 +201,15 @@ abstract class ConflictDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    num number,
+    FieldValue numberFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
     num number,
     FieldValue numberFieldValue,
   });
@@ -190,6 +241,54 @@ class _$ConflictDocumentReference
   @override
   Future<ConflictDocumentSnapshot> transactionGet(Transaction transaction) {
     return transaction.get(reference).then(ConflictDocumentSnapshot._);
+  }
+
+  Future<void> set(
+    Conflict model, {
+    SetOptions? options,
+    FieldValue? numberFieldValue,
+  }) async {
+    final json = {
+      ..._$ConflictToJson(model),
+      if (numberFieldValue != null)
+        _$ConflictFieldMap['number']!: numberFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    Conflict model, {
+    SetOptions? options,
+    FieldValue? numberFieldValue,
+  }) {
+    final json = {
+      ..._$ConflictToJson(model),
+      if (numberFieldValue != null)
+        _$ConflictFieldMap['number']!: numberFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    Conflict model, {
+    SetOptions? options,
+    FieldValue? numberFieldValue,
+  }) {
+    final json = {
+      ..._$ConflictToJson(model),
+      if (numberFieldValue != null)
+        _$ConflictFieldMap['number']!: numberFieldValue,
+    };
+
+    batch.set(reference, json, options);
   }
 
   Future<void> update({
@@ -229,6 +328,26 @@ class _$ConflictDocumentReference
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? number = _sentinel,
+    FieldValue? numberFieldValue,
+  }) {
+    assert(
+      number == _sentinel || numberFieldValue == null,
+      "Cannot specify both number and numberFieldValue",
+    );
+    final json = {
+      if (number != _sentinel)
+        _$ConflictFieldMap['number']!:
+            _$ConflictPerFieldToJson.number(number as num),
+      if (numberFieldValue != null)
+        _$ConflictFieldMap['number']!: numberFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override

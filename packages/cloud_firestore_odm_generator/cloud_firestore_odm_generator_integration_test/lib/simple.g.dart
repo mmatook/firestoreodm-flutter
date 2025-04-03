@@ -129,6 +129,48 @@ abstract class IgnoredGetterDocumentReference
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    IgnoredGetter model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    IgnoredGetter model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    IgnoredGetter model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -143,6 +185,15 @@ abstract class IgnoredGetterDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    int value,
+    FieldValue valueFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
     int value,
     FieldValue valueFieldValue,
   });
@@ -175,6 +226,54 @@ class _$IgnoredGetterDocumentReference extends FirestoreDocumentReference<
   Future<IgnoredGetterDocumentSnapshot> transactionGet(
       Transaction transaction) {
     return transaction.get(reference).then(IgnoredGetterDocumentSnapshot._);
+  }
+
+  Future<void> set(
+    IgnoredGetter model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) async {
+    final json = {
+      ..._$IgnoredGetterToJson(model),
+      if (valueFieldValue != null)
+        _$IgnoredGetterFieldMap['value']!: valueFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    IgnoredGetter model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) {
+    final json = {
+      ..._$IgnoredGetterToJson(model),
+      if (valueFieldValue != null)
+        _$IgnoredGetterFieldMap['value']!: valueFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    IgnoredGetter model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) {
+    final json = {
+      ..._$IgnoredGetterToJson(model),
+      if (valueFieldValue != null)
+        _$IgnoredGetterFieldMap['value']!: valueFieldValue,
+    };
+
+    batch.set(reference, json, options);
   }
 
   Future<void> update({
@@ -214,6 +313,26 @@ class _$IgnoredGetterDocumentReference extends FirestoreDocumentReference<
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? value = _sentinel,
+    FieldValue? valueFieldValue,
+  }) {
+    assert(
+      value == _sentinel || valueFieldValue == null,
+      "Cannot specify both value and valueFieldValue",
+    );
+    final json = {
+      if (value != _sentinel)
+        _$IgnoredGetterFieldMap['value']!:
+            _$IgnoredGetterPerFieldToJson.value(value as int),
+      if (valueFieldValue != null)
+        _$IgnoredGetterFieldMap['value']!: valueFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override
@@ -933,6 +1052,48 @@ abstract class ModelDocumentReference
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    Model model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    Model model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    Model model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -947,6 +1108,15 @@ abstract class ModelDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    String value,
+    FieldValue valueFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
     String value,
     FieldValue valueFieldValue,
   });
@@ -978,6 +1148,51 @@ class _$ModelDocumentReference
   @override
   Future<ModelDocumentSnapshot> transactionGet(Transaction transaction) {
     return transaction.get(reference).then(ModelDocumentSnapshot._);
+  }
+
+  Future<void> set(
+    Model model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) async {
+    final json = {
+      ..._$ModelToJson(model),
+      if (valueFieldValue != null) _$ModelFieldMap['value']!: valueFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    Model model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) {
+    final json = {
+      ..._$ModelToJson(model),
+      if (valueFieldValue != null) _$ModelFieldMap['value']!: valueFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    Model model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) {
+    final json = {
+      ..._$ModelToJson(model),
+      if (valueFieldValue != null) _$ModelFieldMap['value']!: valueFieldValue,
+    };
+
+    batch.set(reference, json, options);
   }
 
   Future<void> update({
@@ -1013,6 +1228,24 @@ class _$ModelDocumentReference
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? value = _sentinel,
+    FieldValue? valueFieldValue,
+  }) {
+    assert(
+      value == _sentinel || valueFieldValue == null,
+      "Cannot specify both value and valueFieldValue",
+    );
+    final json = {
+      if (value != _sentinel)
+        _$ModelFieldMap['value']!: _$ModelPerFieldToJson.value(value as String),
+      if (valueFieldValue != null) _$ModelFieldMap['value']!: valueFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override
@@ -1722,6 +1955,84 @@ abstract class NestedDocumentReference
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    Nested model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+    FieldValue simpleFieldValue,
+    FieldValue valueListFieldValue,
+    FieldValue boolListFieldValue,
+    FieldValue stringListFieldValue,
+    FieldValue numListFieldValue,
+    FieldValue objectListFieldValue,
+    FieldValue dynamicListFieldValue,
+    FieldValue boolSetFieldValue,
+    FieldValue enumValueFieldValue,
+    FieldValue nullableEnumValueFieldValue,
+    FieldValue enumListFieldValue,
+    FieldValue nullableEnumListFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    Nested model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+    FieldValue simpleFieldValue,
+    FieldValue valueListFieldValue,
+    FieldValue boolListFieldValue,
+    FieldValue stringListFieldValue,
+    FieldValue numListFieldValue,
+    FieldValue objectListFieldValue,
+    FieldValue dynamicListFieldValue,
+    FieldValue boolSetFieldValue,
+    FieldValue enumValueFieldValue,
+    FieldValue nullableEnumValueFieldValue,
+    FieldValue enumListFieldValue,
+    FieldValue nullableEnumListFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    Nested model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+    FieldValue simpleFieldValue,
+    FieldValue valueListFieldValue,
+    FieldValue boolListFieldValue,
+    FieldValue stringListFieldValue,
+    FieldValue numListFieldValue,
+    FieldValue objectListFieldValue,
+    FieldValue dynamicListFieldValue,
+    FieldValue boolSetFieldValue,
+    FieldValue enumValueFieldValue,
+    FieldValue nullableEnumValueFieldValue,
+    FieldValue enumListFieldValue,
+    FieldValue nullableEnumListFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -1787,6 +2098,39 @@ abstract class NestedDocumentReference
     List<TestEnum>? nullableEnumList,
     FieldValue nullableEnumListFieldValue,
   });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
+    Nested? value,
+    FieldValue valueFieldValue,
+    int? simple,
+    FieldValue simpleFieldValue,
+    List<Nested>? valueList,
+    FieldValue valueListFieldValue,
+    List<bool>? boolList,
+    FieldValue boolListFieldValue,
+    List<String>? stringList,
+    FieldValue stringListFieldValue,
+    List<num>? numList,
+    FieldValue numListFieldValue,
+    List<Object?>? objectList,
+    FieldValue objectListFieldValue,
+    List<dynamic>? dynamicList,
+    FieldValue dynamicListFieldValue,
+    Set<bool>? boolSet,
+    FieldValue boolSetFieldValue,
+    TestEnum enumValue,
+    FieldValue enumValueFieldValue,
+    TestEnum? nullableEnumValue,
+    FieldValue nullableEnumValueFieldValue,
+    List<TestEnum> enumList,
+    FieldValue enumListFieldValue,
+    List<TestEnum>? nullableEnumList,
+    FieldValue nullableEnumListFieldValue,
+  });
 }
 
 class _$NestedDocumentReference
@@ -1815,6 +2159,159 @@ class _$NestedDocumentReference
   @override
   Future<NestedDocumentSnapshot> transactionGet(Transaction transaction) {
     return transaction.get(reference).then(NestedDocumentSnapshot._);
+  }
+
+  Future<void> set(
+    Nested model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+    FieldValue? simpleFieldValue,
+    FieldValue? valueListFieldValue,
+    FieldValue? boolListFieldValue,
+    FieldValue? stringListFieldValue,
+    FieldValue? numListFieldValue,
+    FieldValue? objectListFieldValue,
+    FieldValue? dynamicListFieldValue,
+    FieldValue? boolSetFieldValue,
+    FieldValue? enumValueFieldValue,
+    FieldValue? nullableEnumValueFieldValue,
+    FieldValue? enumListFieldValue,
+    FieldValue? nullableEnumListFieldValue,
+  }) async {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null) _$NestedFieldMap['value']!: valueFieldValue,
+      if (simpleFieldValue != null)
+        _$NestedFieldMap['simple']!: simpleFieldValue,
+      if (valueListFieldValue != null)
+        _$NestedFieldMap['valueList']!: valueListFieldValue,
+      if (boolListFieldValue != null)
+        _$NestedFieldMap['boolList']!: boolListFieldValue,
+      if (stringListFieldValue != null)
+        _$NestedFieldMap['stringList']!: stringListFieldValue,
+      if (numListFieldValue != null)
+        _$NestedFieldMap['numList']!: numListFieldValue,
+      if (objectListFieldValue != null)
+        _$NestedFieldMap['objectList']!: objectListFieldValue,
+      if (dynamicListFieldValue != null)
+        _$NestedFieldMap['dynamicList']!: dynamicListFieldValue,
+      if (boolSetFieldValue != null)
+        _$NestedFieldMap['boolSet']!: boolSetFieldValue,
+      if (enumValueFieldValue != null)
+        _$NestedFieldMap['enumValue']!: enumValueFieldValue,
+      if (nullableEnumValueFieldValue != null)
+        _$NestedFieldMap['nullableEnumValue']!: nullableEnumValueFieldValue,
+      if (enumListFieldValue != null)
+        _$NestedFieldMap['enumList']!: enumListFieldValue,
+      if (nullableEnumListFieldValue != null)
+        _$NestedFieldMap['nullableEnumList']!: nullableEnumListFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    Nested model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+    FieldValue? simpleFieldValue,
+    FieldValue? valueListFieldValue,
+    FieldValue? boolListFieldValue,
+    FieldValue? stringListFieldValue,
+    FieldValue? numListFieldValue,
+    FieldValue? objectListFieldValue,
+    FieldValue? dynamicListFieldValue,
+    FieldValue? boolSetFieldValue,
+    FieldValue? enumValueFieldValue,
+    FieldValue? nullableEnumValueFieldValue,
+    FieldValue? enumListFieldValue,
+    FieldValue? nullableEnumListFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null) _$NestedFieldMap['value']!: valueFieldValue,
+      if (simpleFieldValue != null)
+        _$NestedFieldMap['simple']!: simpleFieldValue,
+      if (valueListFieldValue != null)
+        _$NestedFieldMap['valueList']!: valueListFieldValue,
+      if (boolListFieldValue != null)
+        _$NestedFieldMap['boolList']!: boolListFieldValue,
+      if (stringListFieldValue != null)
+        _$NestedFieldMap['stringList']!: stringListFieldValue,
+      if (numListFieldValue != null)
+        _$NestedFieldMap['numList']!: numListFieldValue,
+      if (objectListFieldValue != null)
+        _$NestedFieldMap['objectList']!: objectListFieldValue,
+      if (dynamicListFieldValue != null)
+        _$NestedFieldMap['dynamicList']!: dynamicListFieldValue,
+      if (boolSetFieldValue != null)
+        _$NestedFieldMap['boolSet']!: boolSetFieldValue,
+      if (enumValueFieldValue != null)
+        _$NestedFieldMap['enumValue']!: enumValueFieldValue,
+      if (nullableEnumValueFieldValue != null)
+        _$NestedFieldMap['nullableEnumValue']!: nullableEnumValueFieldValue,
+      if (enumListFieldValue != null)
+        _$NestedFieldMap['enumList']!: enumListFieldValue,
+      if (nullableEnumListFieldValue != null)
+        _$NestedFieldMap['nullableEnumList']!: nullableEnumListFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    Nested model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+    FieldValue? simpleFieldValue,
+    FieldValue? valueListFieldValue,
+    FieldValue? boolListFieldValue,
+    FieldValue? stringListFieldValue,
+    FieldValue? numListFieldValue,
+    FieldValue? objectListFieldValue,
+    FieldValue? dynamicListFieldValue,
+    FieldValue? boolSetFieldValue,
+    FieldValue? enumValueFieldValue,
+    FieldValue? nullableEnumValueFieldValue,
+    FieldValue? enumListFieldValue,
+    FieldValue? nullableEnumListFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null) _$NestedFieldMap['value']!: valueFieldValue,
+      if (simpleFieldValue != null)
+        _$NestedFieldMap['simple']!: simpleFieldValue,
+      if (valueListFieldValue != null)
+        _$NestedFieldMap['valueList']!: valueListFieldValue,
+      if (boolListFieldValue != null)
+        _$NestedFieldMap['boolList']!: boolListFieldValue,
+      if (stringListFieldValue != null)
+        _$NestedFieldMap['stringList']!: stringListFieldValue,
+      if (numListFieldValue != null)
+        _$NestedFieldMap['numList']!: numListFieldValue,
+      if (objectListFieldValue != null)
+        _$NestedFieldMap['objectList']!: objectListFieldValue,
+      if (dynamicListFieldValue != null)
+        _$NestedFieldMap['dynamicList']!: dynamicListFieldValue,
+      if (boolSetFieldValue != null)
+        _$NestedFieldMap['boolSet']!: boolSetFieldValue,
+      if (enumValueFieldValue != null)
+        _$NestedFieldMap['enumValue']!: enumValueFieldValue,
+      if (nullableEnumValueFieldValue != null)
+        _$NestedFieldMap['nullableEnumValue']!: nullableEnumValueFieldValue,
+      if (enumListFieldValue != null)
+        _$NestedFieldMap['enumList']!: enumListFieldValue,
+      if (nullableEnumListFieldValue != null)
+        _$NestedFieldMap['nullableEnumList']!: nullableEnumListFieldValue,
+    };
+
+    batch.set(reference, json, options);
   }
 
   Future<void> update({
@@ -2116,6 +2613,157 @@ class _$NestedDocumentReference
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? value = _sentinel,
+    FieldValue? valueFieldValue,
+    Object? simple = _sentinel,
+    FieldValue? simpleFieldValue,
+    Object? valueList = _sentinel,
+    FieldValue? valueListFieldValue,
+    Object? boolList = _sentinel,
+    FieldValue? boolListFieldValue,
+    Object? stringList = _sentinel,
+    FieldValue? stringListFieldValue,
+    Object? numList = _sentinel,
+    FieldValue? numListFieldValue,
+    Object? objectList = _sentinel,
+    FieldValue? objectListFieldValue,
+    Object? dynamicList = _sentinel,
+    FieldValue? dynamicListFieldValue,
+    Object? boolSet = _sentinel,
+    FieldValue? boolSetFieldValue,
+    Object? enumValue = _sentinel,
+    FieldValue? enumValueFieldValue,
+    Object? nullableEnumValue = _sentinel,
+    FieldValue? nullableEnumValueFieldValue,
+    Object? enumList = _sentinel,
+    FieldValue? enumListFieldValue,
+    Object? nullableEnumList = _sentinel,
+    FieldValue? nullableEnumListFieldValue,
+  }) {
+    assert(
+      value == _sentinel || valueFieldValue == null,
+      "Cannot specify both value and valueFieldValue",
+    );
+    assert(
+      simple == _sentinel || simpleFieldValue == null,
+      "Cannot specify both simple and simpleFieldValue",
+    );
+    assert(
+      valueList == _sentinel || valueListFieldValue == null,
+      "Cannot specify both valueList and valueListFieldValue",
+    );
+    assert(
+      boolList == _sentinel || boolListFieldValue == null,
+      "Cannot specify both boolList and boolListFieldValue",
+    );
+    assert(
+      stringList == _sentinel || stringListFieldValue == null,
+      "Cannot specify both stringList and stringListFieldValue",
+    );
+    assert(
+      numList == _sentinel || numListFieldValue == null,
+      "Cannot specify both numList and numListFieldValue",
+    );
+    assert(
+      objectList == _sentinel || objectListFieldValue == null,
+      "Cannot specify both objectList and objectListFieldValue",
+    );
+    assert(
+      dynamicList == _sentinel || dynamicListFieldValue == null,
+      "Cannot specify both dynamicList and dynamicListFieldValue",
+    );
+    assert(
+      boolSet == _sentinel || boolSetFieldValue == null,
+      "Cannot specify both boolSet and boolSetFieldValue",
+    );
+    assert(
+      enumValue == _sentinel || enumValueFieldValue == null,
+      "Cannot specify both enumValue and enumValueFieldValue",
+    );
+    assert(
+      nullableEnumValue == _sentinel || nullableEnumValueFieldValue == null,
+      "Cannot specify both nullableEnumValue and nullableEnumValueFieldValue",
+    );
+    assert(
+      enumList == _sentinel || enumListFieldValue == null,
+      "Cannot specify both enumList and enumListFieldValue",
+    );
+    assert(
+      nullableEnumList == _sentinel || nullableEnumListFieldValue == null,
+      "Cannot specify both nullableEnumList and nullableEnumListFieldValue",
+    );
+    final json = {
+      if (value != _sentinel)
+        _$NestedFieldMap['value']!:
+            _$NestedPerFieldToJson.value(value as Nested?),
+      if (valueFieldValue != null) _$NestedFieldMap['value']!: valueFieldValue,
+      if (simple != _sentinel)
+        _$NestedFieldMap['simple']!:
+            _$NestedPerFieldToJson.simple(simple as int?),
+      if (simpleFieldValue != null)
+        _$NestedFieldMap['simple']!: simpleFieldValue,
+      if (valueList != _sentinel)
+        _$NestedFieldMap['valueList']!:
+            _$NestedPerFieldToJson.valueList(valueList as List<Nested>?),
+      if (valueListFieldValue != null)
+        _$NestedFieldMap['valueList']!: valueListFieldValue,
+      if (boolList != _sentinel)
+        _$NestedFieldMap['boolList']!:
+            _$NestedPerFieldToJson.boolList(boolList as List<bool>?),
+      if (boolListFieldValue != null)
+        _$NestedFieldMap['boolList']!: boolListFieldValue,
+      if (stringList != _sentinel)
+        _$NestedFieldMap['stringList']!:
+            _$NestedPerFieldToJson.stringList(stringList as List<String>?),
+      if (stringListFieldValue != null)
+        _$NestedFieldMap['stringList']!: stringListFieldValue,
+      if (numList != _sentinel)
+        _$NestedFieldMap['numList']!:
+            _$NestedPerFieldToJson.numList(numList as List<num>?),
+      if (numListFieldValue != null)
+        _$NestedFieldMap['numList']!: numListFieldValue,
+      if (objectList != _sentinel)
+        _$NestedFieldMap['objectList']!:
+            _$NestedPerFieldToJson.objectList(objectList as List<Object?>?),
+      if (objectListFieldValue != null)
+        _$NestedFieldMap['objectList']!: objectListFieldValue,
+      if (dynamicList != _sentinel)
+        _$NestedFieldMap['dynamicList']!:
+            _$NestedPerFieldToJson.dynamicList(dynamicList as List<dynamic>?),
+      if (dynamicListFieldValue != null)
+        _$NestedFieldMap['dynamicList']!: dynamicListFieldValue,
+      if (boolSet != _sentinel)
+        _$NestedFieldMap['boolSet']!:
+            _$NestedPerFieldToJson.boolSet(boolSet as Set<bool>?),
+      if (boolSetFieldValue != null)
+        _$NestedFieldMap['boolSet']!: boolSetFieldValue,
+      if (enumValue != _sentinel)
+        _$NestedFieldMap['enumValue']!:
+            _$NestedPerFieldToJson.enumValue(enumValue as TestEnum),
+      if (enumValueFieldValue != null)
+        _$NestedFieldMap['enumValue']!: enumValueFieldValue,
+      if (nullableEnumValue != _sentinel)
+        _$NestedFieldMap['nullableEnumValue']!: _$NestedPerFieldToJson
+            .nullableEnumValue(nullableEnumValue as TestEnum?),
+      if (nullableEnumValueFieldValue != null)
+        _$NestedFieldMap['nullableEnumValue']!: nullableEnumValueFieldValue,
+      if (enumList != _sentinel)
+        _$NestedFieldMap['enumList']!:
+            _$NestedPerFieldToJson.enumList(enumList as List<TestEnum>),
+      if (enumListFieldValue != null)
+        _$NestedFieldMap['enumList']!: enumListFieldValue,
+      if (nullableEnumList != _sentinel)
+        _$NestedFieldMap['nullableEnumList']!: _$NestedPerFieldToJson
+            .nullableEnumList(nullableEnumList as List<TestEnum>?),
+      if (nullableEnumListFieldValue != null)
+        _$NestedFieldMap['nullableEnumList']!: nullableEnumListFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override
@@ -5213,6 +5861,48 @@ abstract class OptionalJsonDocumentReference extends FirestoreDocumentReference<
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    OptionalJson model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    OptionalJson model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    OptionalJson model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -5227,6 +5917,15 @@ abstract class OptionalJsonDocumentReference extends FirestoreDocumentReference<
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    int value,
+    FieldValue valueFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
     int value,
     FieldValue valueFieldValue,
   });
@@ -5258,6 +5957,54 @@ class _$OptionalJsonDocumentReference extends FirestoreDocumentReference<
   @override
   Future<OptionalJsonDocumentSnapshot> transactionGet(Transaction transaction) {
     return transaction.get(reference).then(OptionalJsonDocumentSnapshot._);
+  }
+
+  Future<void> set(
+    OptionalJson model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) async {
+    final json = {
+      ..._$OptionalJsonToJson(model),
+      if (valueFieldValue != null)
+        _$OptionalJsonFieldMap['value']!: valueFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    OptionalJson model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) {
+    final json = {
+      ..._$OptionalJsonToJson(model),
+      if (valueFieldValue != null)
+        _$OptionalJsonFieldMap['value']!: valueFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    OptionalJson model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) {
+    final json = {
+      ..._$OptionalJsonToJson(model),
+      if (valueFieldValue != null)
+        _$OptionalJsonFieldMap['value']!: valueFieldValue,
+    };
+
+    batch.set(reference, json, options);
   }
 
   Future<void> update({
@@ -5297,6 +6044,26 @@ class _$OptionalJsonDocumentReference extends FirestoreDocumentReference<
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? value = _sentinel,
+    FieldValue? valueFieldValue,
+  }) {
+    assert(
+      value == _sentinel || valueFieldValue == null,
+      "Cannot specify both value and valueFieldValue",
+    );
+    final json = {
+      if (value != _sentinel)
+        _$OptionalJsonFieldMap['value']!:
+            _$OptionalJsonPerFieldToJson.value(value as int),
+      if (valueFieldValue != null)
+        _$OptionalJsonFieldMap['value']!: valueFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override
@@ -6016,6 +6783,48 @@ abstract class MixedJsonDocumentReference
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    MixedJson model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    MixedJson model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    MixedJson model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -6030,6 +6839,15 @@ abstract class MixedJsonDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    int value,
+    FieldValue valueFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
     int value,
     FieldValue valueFieldValue,
   });
@@ -6061,6 +6879,54 @@ class _$MixedJsonDocumentReference
   @override
   Future<MixedJsonDocumentSnapshot> transactionGet(Transaction transaction) {
     return transaction.get(reference).then(MixedJsonDocumentSnapshot._);
+  }
+
+  Future<void> set(
+    MixedJson model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) async {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null)
+        _$MixedJsonFieldMap['value']!: valueFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    MixedJson model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null)
+        _$MixedJsonFieldMap['value']!: valueFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    MixedJson model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null)
+        _$MixedJsonFieldMap['value']!: valueFieldValue,
+    };
+
+    batch.set(reference, json, options);
   }
 
   Future<void> update({
@@ -6100,6 +6966,26 @@ class _$MixedJsonDocumentReference
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? value = _sentinel,
+    FieldValue? valueFieldValue,
+  }) {
+    assert(
+      value == _sentinel || valueFieldValue == null,
+      "Cannot specify both value and valueFieldValue",
+    );
+    final json = {
+      if (value != _sentinel)
+        _$MixedJsonFieldMap['value']!:
+            _$MixedJsonPerFieldToJson.value(value as int),
+      if (valueFieldValue != null)
+        _$MixedJsonFieldMap['value']!: valueFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override
@@ -6832,6 +7718,51 @@ abstract class RootDocumentReference
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    Root model, {
+    SetOptions? options,
+    FieldValue nonNullableFieldValue,
+    FieldValue nullableFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    Root model, {
+    SetOptions? options,
+    FieldValue nonNullableFieldValue,
+    FieldValue nullableFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    Root model, {
+    SetOptions? options,
+    FieldValue nonNullableFieldValue,
+    FieldValue nullableFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -6848,6 +7779,17 @@ abstract class RootDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    String nonNullable,
+    FieldValue nonNullableFieldValue,
+    int? nullable,
+    FieldValue nullableFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
     String nonNullable,
     FieldValue nonNullableFieldValue,
     int? nullable,
@@ -6900,6 +7842,63 @@ class _$RootDocumentReference
   @override
   Future<RootDocumentSnapshot> transactionGet(Transaction transaction) {
     return transaction.get(reference).then(RootDocumentSnapshot._);
+  }
+
+  Future<void> set(
+    Root model, {
+    SetOptions? options,
+    FieldValue? nonNullableFieldValue,
+    FieldValue? nullableFieldValue,
+  }) async {
+    final json = {
+      ...model.toJson(),
+      if (nonNullableFieldValue != null)
+        _$RootFieldMap['nonNullable']!: nonNullableFieldValue,
+      if (nullableFieldValue != null)
+        _$RootFieldMap['nullable']!: nullableFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    Root model, {
+    SetOptions? options,
+    FieldValue? nonNullableFieldValue,
+    FieldValue? nullableFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (nonNullableFieldValue != null)
+        _$RootFieldMap['nonNullable']!: nonNullableFieldValue,
+      if (nullableFieldValue != null)
+        _$RootFieldMap['nullable']!: nullableFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    Root model, {
+    SetOptions? options,
+    FieldValue? nonNullableFieldValue,
+    FieldValue? nullableFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (nonNullableFieldValue != null)
+        _$RootFieldMap['nonNullable']!: nonNullableFieldValue,
+      if (nullableFieldValue != null)
+        _$RootFieldMap['nullable']!: nullableFieldValue,
+    };
+
+    batch.set(reference, json, options);
   }
 
   Future<void> update({
@@ -6961,6 +7960,37 @@ class _$RootDocumentReference
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? nonNullable = _sentinel,
+    FieldValue? nonNullableFieldValue,
+    Object? nullable = _sentinel,
+    FieldValue? nullableFieldValue,
+  }) {
+    assert(
+      nonNullable == _sentinel || nonNullableFieldValue == null,
+      "Cannot specify both nonNullable and nonNullableFieldValue",
+    );
+    assert(
+      nullable == _sentinel || nullableFieldValue == null,
+      "Cannot specify both nullable and nullableFieldValue",
+    );
+    final json = {
+      if (nonNullable != _sentinel)
+        _$RootFieldMap['nonNullable']!:
+            _$RootPerFieldToJson.nonNullable(nonNullable as String),
+      if (nonNullableFieldValue != null)
+        _$RootFieldMap['nonNullable']!: nonNullableFieldValue,
+      if (nullable != _sentinel)
+        _$RootFieldMap['nullable']!:
+            _$RootPerFieldToJson.nullable(nullable as int?),
+      if (nullableFieldValue != null)
+        _$RootFieldMap['nullable']!: nullableFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override
@@ -7821,6 +8851,51 @@ abstract class SubDocumentReference
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    Sub model, {
+    SetOptions? options,
+    FieldValue nonNullableFieldValue,
+    FieldValue nullableFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    Sub model, {
+    SetOptions? options,
+    FieldValue nonNullableFieldValue,
+    FieldValue nullableFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    Sub model, {
+    SetOptions? options,
+    FieldValue nonNullableFieldValue,
+    FieldValue nullableFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -7837,6 +8912,17 @@ abstract class SubDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    String nonNullable,
+    FieldValue nonNullableFieldValue,
+    int? nullable,
+    FieldValue nullableFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
     String nonNullable,
     FieldValue nonNullableFieldValue,
     int? nullable,
@@ -7875,6 +8961,63 @@ class _$SubDocumentReference
   @override
   Future<SubDocumentSnapshot> transactionGet(Transaction transaction) {
     return transaction.get(reference).then(SubDocumentSnapshot._);
+  }
+
+  Future<void> set(
+    Sub model, {
+    SetOptions? options,
+    FieldValue? nonNullableFieldValue,
+    FieldValue? nullableFieldValue,
+  }) async {
+    final json = {
+      ...model.toJson(),
+      if (nonNullableFieldValue != null)
+        _$SubFieldMap['nonNullable']!: nonNullableFieldValue,
+      if (nullableFieldValue != null)
+        _$SubFieldMap['nullable']!: nullableFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    Sub model, {
+    SetOptions? options,
+    FieldValue? nonNullableFieldValue,
+    FieldValue? nullableFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (nonNullableFieldValue != null)
+        _$SubFieldMap['nonNullable']!: nonNullableFieldValue,
+      if (nullableFieldValue != null)
+        _$SubFieldMap['nullable']!: nullableFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    Sub model, {
+    SetOptions? options,
+    FieldValue? nonNullableFieldValue,
+    FieldValue? nullableFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (nonNullableFieldValue != null)
+        _$SubFieldMap['nonNullable']!: nonNullableFieldValue,
+      if (nullableFieldValue != null)
+        _$SubFieldMap['nullable']!: nullableFieldValue,
+    };
+
+    batch.set(reference, json, options);
   }
 
   Future<void> update({
@@ -7936,6 +9079,37 @@ class _$SubDocumentReference
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? nonNullable = _sentinel,
+    FieldValue? nonNullableFieldValue,
+    Object? nullable = _sentinel,
+    FieldValue? nullableFieldValue,
+  }) {
+    assert(
+      nonNullable == _sentinel || nonNullableFieldValue == null,
+      "Cannot specify both nonNullable and nonNullableFieldValue",
+    );
+    assert(
+      nullable == _sentinel || nullableFieldValue == null,
+      "Cannot specify both nullable and nullableFieldValue",
+    );
+    final json = {
+      if (nonNullable != _sentinel)
+        _$SubFieldMap['nonNullable']!:
+            _$SubPerFieldToJson.nonNullable(nonNullable as String),
+      if (nonNullableFieldValue != null)
+        _$SubFieldMap['nonNullable']!: nonNullableFieldValue,
+      if (nullable != _sentinel)
+        _$SubFieldMap['nullable']!:
+            _$SubPerFieldToJson.nullable(nullable as int?),
+      if (nullableFieldValue != null)
+        _$SubFieldMap['nullable']!: nullableFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override
@@ -8801,6 +9975,48 @@ abstract class AsCamelCaseDocumentReference extends FirestoreDocumentReference<
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    AsCamelCase model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    AsCamelCase model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    AsCamelCase model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -8815,6 +10031,15 @@ abstract class AsCamelCaseDocumentReference extends FirestoreDocumentReference<
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    num value,
+    FieldValue valueFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
     num value,
     FieldValue valueFieldValue,
   });
@@ -8851,6 +10076,54 @@ class _$AsCamelCaseDocumentReference
   @override
   Future<AsCamelCaseDocumentSnapshot> transactionGet(Transaction transaction) {
     return transaction.get(reference).then(AsCamelCaseDocumentSnapshot._);
+  }
+
+  Future<void> set(
+    AsCamelCase model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) async {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null)
+        _$AsCamelCaseFieldMap['value']!: valueFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    AsCamelCase model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null)
+        _$AsCamelCaseFieldMap['value']!: valueFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    AsCamelCase model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null)
+        _$AsCamelCaseFieldMap['value']!: valueFieldValue,
+    };
+
+    batch.set(reference, json, options);
   }
 
   Future<void> update({
@@ -8890,6 +10163,26 @@ class _$AsCamelCaseDocumentReference
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? value = _sentinel,
+    FieldValue? valueFieldValue,
+  }) {
+    assert(
+      value == _sentinel || valueFieldValue == null,
+      "Cannot specify both value and valueFieldValue",
+    );
+    final json = {
+      if (value != _sentinel)
+        _$AsCamelCaseFieldMap['value']!:
+            _$AsCamelCasePerFieldToJson.value(value as num),
+      if (valueFieldValue != null)
+        _$AsCamelCaseFieldMap['value']!: valueFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override
@@ -9626,6 +10919,48 @@ abstract class CustomSubNameDocumentReference
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    CustomSubName model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    CustomSubName model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    CustomSubName model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -9640,6 +10975,15 @@ abstract class CustomSubNameDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    num value,
+    FieldValue valueFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
     num value,
     FieldValue valueFieldValue,
   });
@@ -9679,6 +11023,54 @@ class _$CustomSubNameDocumentReference extends FirestoreDocumentReference<
     return transaction.get(reference).then(CustomSubNameDocumentSnapshot._);
   }
 
+  Future<void> set(
+    CustomSubName model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) async {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null)
+        _$CustomSubNameFieldMap['value']!: valueFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    CustomSubName model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null)
+        _$CustomSubNameFieldMap['value']!: valueFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    CustomSubName model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null)
+        _$CustomSubNameFieldMap['value']!: valueFieldValue,
+    };
+
+    batch.set(reference, json, options);
+  }
+
   Future<void> update({
     Object? value = _sentinel,
     FieldValue? valueFieldValue,
@@ -9716,6 +11108,26 @@ class _$CustomSubNameDocumentReference extends FirestoreDocumentReference<
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? value = _sentinel,
+    FieldValue? valueFieldValue,
+  }) {
+    assert(
+      value == _sentinel || valueFieldValue == null,
+      "Cannot specify both value and valueFieldValue",
+    );
+    final json = {
+      if (value != _sentinel)
+        _$CustomSubNameFieldMap['value']!:
+            _$CustomSubNamePerFieldToJson.value(value as num),
+      if (valueFieldValue != null)
+        _$CustomSubNameFieldMap['value']!: valueFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override
@@ -10454,6 +11866,48 @@ abstract class ThisIsACustomPrefixDocumentReference
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    CustomClassPrefix model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    CustomClassPrefix model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    CustomClassPrefix model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -10468,6 +11922,15 @@ abstract class ThisIsACustomPrefixDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    num value,
+    FieldValue valueFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
     num value,
     FieldValue valueFieldValue,
   });
@@ -10509,6 +11972,54 @@ class _$ThisIsACustomPrefixDocumentReference extends FirestoreDocumentReference<
         .then(ThisIsACustomPrefixDocumentSnapshot._);
   }
 
+  Future<void> set(
+    CustomClassPrefix model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) async {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null)
+        _$CustomClassPrefixFieldMap['value']!: valueFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    CustomClassPrefix model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null)
+        _$CustomClassPrefixFieldMap['value']!: valueFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    CustomClassPrefix model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null)
+        _$CustomClassPrefixFieldMap['value']!: valueFieldValue,
+    };
+
+    batch.set(reference, json, options);
+  }
+
   Future<void> update({
     Object? value = _sentinel,
     FieldValue? valueFieldValue,
@@ -10546,6 +12057,26 @@ class _$ThisIsACustomPrefixDocumentReference extends FirestoreDocumentReference<
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? value = _sentinel,
+    FieldValue? valueFieldValue,
+  }) {
+    assert(
+      value == _sentinel || valueFieldValue == null,
+      "Cannot specify both value and valueFieldValue",
+    );
+    final json = {
+      if (value != _sentinel)
+        _$CustomClassPrefixFieldMap['value']!:
+            _$CustomClassPrefixPerFieldToJson.value(value as num),
+      if (valueFieldValue != null)
+        _$CustomClassPrefixFieldMap['value']!: valueFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override
@@ -11281,6 +12812,48 @@ abstract class ExplicitPathDocumentReference extends FirestoreDocumentReference<
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    ExplicitPath model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    ExplicitPath model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    ExplicitPath model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -11295,6 +12868,15 @@ abstract class ExplicitPathDocumentReference extends FirestoreDocumentReference<
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    num value,
+    FieldValue valueFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
     num value,
     FieldValue valueFieldValue,
   });
@@ -11331,6 +12913,54 @@ class _$ExplicitPathDocumentReference extends FirestoreDocumentReference<
   @override
   Future<ExplicitPathDocumentSnapshot> transactionGet(Transaction transaction) {
     return transaction.get(reference).then(ExplicitPathDocumentSnapshot._);
+  }
+
+  Future<void> set(
+    ExplicitPath model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) async {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null)
+        _$ExplicitPathFieldMap['value']!: valueFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    ExplicitPath model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null)
+        _$ExplicitPathFieldMap['value']!: valueFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    ExplicitPath model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null)
+        _$ExplicitPathFieldMap['value']!: valueFieldValue,
+    };
+
+    batch.set(reference, json, options);
   }
 
   Future<void> update({
@@ -11370,6 +13000,26 @@ class _$ExplicitPathDocumentReference extends FirestoreDocumentReference<
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? value = _sentinel,
+    FieldValue? valueFieldValue,
+  }) {
+    assert(
+      value == _sentinel || valueFieldValue == null,
+      "Cannot specify both value and valueFieldValue",
+    );
+    final json = {
+      if (value != _sentinel)
+        _$ExplicitPathFieldMap['value']!:
+            _$ExplicitPathPerFieldToJson.value(value as num),
+      if (valueFieldValue != null)
+        _$ExplicitPathFieldMap['value']!: valueFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override
@@ -12107,6 +13757,48 @@ abstract class ExplicitSubPathDocumentReference
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    ExplicitSubPath model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    ExplicitSubPath model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    ExplicitSubPath model, {
+    SetOptions? options,
+    FieldValue valueFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -12121,6 +13813,15 @@ abstract class ExplicitSubPathDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    num value,
+    FieldValue valueFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
     num value,
     FieldValue valueFieldValue,
   });
@@ -12160,6 +13861,54 @@ class _$ExplicitSubPathDocumentReference extends FirestoreDocumentReference<
     return transaction.get(reference).then(ExplicitSubPathDocumentSnapshot._);
   }
 
+  Future<void> set(
+    ExplicitSubPath model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) async {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null)
+        _$ExplicitSubPathFieldMap['value']!: valueFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    ExplicitSubPath model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null)
+        _$ExplicitSubPathFieldMap['value']!: valueFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    ExplicitSubPath model, {
+    SetOptions? options,
+    FieldValue? valueFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (valueFieldValue != null)
+        _$ExplicitSubPathFieldMap['value']!: valueFieldValue,
+    };
+
+    batch.set(reference, json, options);
+  }
+
   Future<void> update({
     Object? value = _sentinel,
     FieldValue? valueFieldValue,
@@ -12197,6 +13946,26 @@ class _$ExplicitSubPathDocumentReference extends FirestoreDocumentReference<
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? value = _sentinel,
+    FieldValue? valueFieldValue,
+  }) {
+    assert(
+      value == _sentinel || valueFieldValue == null,
+      "Cannot specify both value and valueFieldValue",
+    );
+    final json = {
+      if (value != _sentinel)
+        _$ExplicitSubPathFieldMap['value']!:
+            _$ExplicitSubPathPerFieldToJson.value(value as num),
+      if (valueFieldValue != null)
+        _$ExplicitSubPathFieldMap['value']!: valueFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override
@@ -12812,6 +14581,926 @@ class ExplicitSubPathQueryDocumentSnapshot
   }
 }
 
+/// A collection reference object can be used for adding documents,
+/// getting document references, and querying for documents
+/// (using the methods inherited from Query).
+abstract class SubClassCollectionReference
+    implements
+        SubClassQuery,
+        FirestoreCollectionReference<SubClass, SubClassQuerySnapshot> {
+  factory SubClassCollectionReference([
+    FirebaseFirestore? firestore,
+  ]) = _$SubClassCollectionReference;
+
+  static SubClass fromFirestore(
+    DocumentSnapshot<Map<String, Object?>> snapshot,
+    SnapshotOptions? options,
+  ) {
+    return SubClass.fromJson(snapshot.data()!);
+  }
+
+  static Map<String, Object?> toFirestore(
+    SubClass value,
+    SetOptions? options,
+  ) {
+    return value.toJson();
+  }
+
+  @override
+  CollectionReference<SubClass> get reference;
+
+  @override
+  SubClassDocumentReference doc([String? id]);
+
+  /// Add a new document to this collection with the specified data,
+  /// assigning it a document ID automatically.
+  Future<SubClassDocumentReference> add(SubClass value);
+}
+
+class _$SubClassCollectionReference extends _$SubClassQuery
+    implements SubClassCollectionReference {
+  factory _$SubClassCollectionReference([FirebaseFirestore? firestore]) {
+    firestore ??= FirebaseFirestore.instance;
+
+    return _$SubClassCollectionReference._(
+      firestore.collection('root').withConverter(
+            fromFirestore: SubClassCollectionReference.fromFirestore,
+            toFirestore: SubClassCollectionReference.toFirestore,
+          ),
+    );
+  }
+
+  _$SubClassCollectionReference._(
+    CollectionReference<SubClass> reference,
+  ) : super(reference, $referenceWithoutCursor: reference);
+
+  String get path => reference.path;
+
+  @override
+  CollectionReference<SubClass> get reference =>
+      super.reference as CollectionReference<SubClass>;
+
+  @override
+  SubClassDocumentReference doc([String? id]) {
+    assert(
+      id == null || id.split('/').length == 1,
+      'The document ID cannot be from a different collection',
+    );
+    return SubClassDocumentReference(
+      reference.doc(id),
+    );
+  }
+
+  @override
+  Future<SubClassDocumentReference> add(SubClass value) {
+    return reference.add(value).then((ref) => SubClassDocumentReference(ref));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is _$SubClassCollectionReference &&
+        other.runtimeType == runtimeType &&
+        other.reference == reference;
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, reference);
+}
+
+abstract class SubClassDocumentReference
+    extends FirestoreDocumentReference<SubClass, SubClassDocumentSnapshot> {
+  factory SubClassDocumentReference(DocumentReference<SubClass> reference) =
+      _$SubClassDocumentReference;
+
+  DocumentReference<SubClass> get reference;
+
+  /// A reference to the [SubClassCollectionReference] containing this document.
+  SubClassCollectionReference get parent {
+    return _$SubClassCollectionReference(reference.firestore);
+  }
+
+  @override
+  Stream<SubClassDocumentSnapshot> snapshots();
+
+  @override
+  Future<SubClassDocumentSnapshot> get([GetOptions? options]);
+
+  @override
+  Future<void> delete();
+
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    SubClass model, {
+    SetOptions? options,
+    FieldValue instanceGetterFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    SubClass model, {
+    SetOptions? options,
+    FieldValue instanceGetterFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    SubClass model, {
+    SetOptions? options,
+    FieldValue instanceGetterFieldValue,
+  });
+
+  /// Updates data on the document. Data will be merged with any existing
+  /// document data.
+  ///
+  /// If no document exists yet, the update will fail.
+  Future<void> update({
+    int instanceGetter,
+    FieldValue instanceGetterFieldValue,
+  });
+
+  /// Updates fields in the current document using the transaction API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void transactionUpdate(
+    Transaction transaction, {
+    int instanceGetter,
+    FieldValue instanceGetterFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
+    int instanceGetter,
+    FieldValue instanceGetterFieldValue,
+  });
+}
+
+class _$SubClassDocumentReference
+    extends FirestoreDocumentReference<SubClass, SubClassDocumentSnapshot>
+    implements SubClassDocumentReference {
+  _$SubClassDocumentReference(this.reference);
+
+  @override
+  final DocumentReference<SubClass> reference;
+
+  /// A reference to the [SubClassCollectionReference] containing this document.
+  SubClassCollectionReference get parent {
+    return _$SubClassCollectionReference(reference.firestore);
+  }
+
+  @override
+  Stream<SubClassDocumentSnapshot> snapshots() {
+    return reference.snapshots().map(SubClassDocumentSnapshot._);
+  }
+
+  @override
+  Future<SubClassDocumentSnapshot> get([GetOptions? options]) {
+    return reference.get(options).then(SubClassDocumentSnapshot._);
+  }
+
+  @override
+  Future<SubClassDocumentSnapshot> transactionGet(Transaction transaction) {
+    return transaction.get(reference).then(SubClassDocumentSnapshot._);
+  }
+
+  Future<void> set(
+    SubClass model, {
+    SetOptions? options,
+    FieldValue? instanceGetterFieldValue,
+  }) async {
+    final json = {
+      ...model.toJson(),
+      if (instanceGetterFieldValue != null)
+        _$SubClassFieldMap['instanceGetter']!: instanceGetterFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    SubClass model, {
+    SetOptions? options,
+    FieldValue? instanceGetterFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (instanceGetterFieldValue != null)
+        _$SubClassFieldMap['instanceGetter']!: instanceGetterFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    SubClass model, {
+    SetOptions? options,
+    FieldValue? instanceGetterFieldValue,
+  }) {
+    final json = {
+      ...model.toJson(),
+      if (instanceGetterFieldValue != null)
+        _$SubClassFieldMap['instanceGetter']!: instanceGetterFieldValue,
+    };
+
+    batch.set(reference, json, options);
+  }
+
+  Future<void> update({
+    Object? instanceGetter = _sentinel,
+    FieldValue? instanceGetterFieldValue,
+  }) async {
+    assert(
+      instanceGetter == _sentinel || instanceGetterFieldValue == null,
+      "Cannot specify both instanceGetter and instanceGetterFieldValue",
+    );
+    final json = {
+      if (instanceGetter != _sentinel)
+        _$SubClassFieldMap['instanceGetter']!:
+            _$SubClassPerFieldToJson.instanceGetter(instanceGetter as int),
+      if (instanceGetterFieldValue != null)
+        _$SubClassFieldMap['instanceGetter']!: instanceGetterFieldValue,
+    };
+
+    return reference.update(json);
+  }
+
+  void transactionUpdate(
+    Transaction transaction, {
+    Object? instanceGetter = _sentinel,
+    FieldValue? instanceGetterFieldValue,
+  }) {
+    assert(
+      instanceGetter == _sentinel || instanceGetterFieldValue == null,
+      "Cannot specify both instanceGetter and instanceGetterFieldValue",
+    );
+    final json = {
+      if (instanceGetter != _sentinel)
+        _$SubClassFieldMap['instanceGetter']!:
+            _$SubClassPerFieldToJson.instanceGetter(instanceGetter as int),
+      if (instanceGetterFieldValue != null)
+        _$SubClassFieldMap['instanceGetter']!: instanceGetterFieldValue,
+    };
+
+    transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? instanceGetter = _sentinel,
+    FieldValue? instanceGetterFieldValue,
+  }) {
+    assert(
+      instanceGetter == _sentinel || instanceGetterFieldValue == null,
+      "Cannot specify both instanceGetter and instanceGetterFieldValue",
+    );
+    final json = {
+      if (instanceGetter != _sentinel)
+        _$SubClassFieldMap['instanceGetter']!:
+            _$SubClassPerFieldToJson.instanceGetter(instanceGetter as int),
+      if (instanceGetterFieldValue != null)
+        _$SubClassFieldMap['instanceGetter']!: instanceGetterFieldValue,
+    };
+
+    batch.update(reference, json);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SubClassDocumentReference &&
+        other.runtimeType == runtimeType &&
+        other.parent == parent &&
+        other.id == id;
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, parent, id);
+}
+
+abstract class SubClassQuery
+    implements QueryReference<SubClass, SubClassQuerySnapshot> {
+  @override
+  SubClassQuery limit(int limit);
+
+  @override
+  SubClassQuery limitToLast(int limit);
+
+  /// Perform a where query based on a [FieldPath].
+  ///
+  /// This method is considered unsafe as it does check that the field path
+  /// maps to a valid property or that parameters such as [isEqualTo] receive
+  /// a value of the correct type.
+  ///
+  /// If possible, instead use the more explicit variant of where queries:
+  ///
+  /// **AVOID**:
+  /// ```dart
+  /// collection.whereFieldPath(FieldPath.fromString('title'), isEqualTo: 'title');
+  /// ```
+  ///
+  /// **PREFER**:
+  /// ```dart
+  /// collection.whereTitle(isEqualTo: 'title');
+  /// ```
+  SubClassQuery whereFieldPath(
+    Object fieldPath, {
+    Object? isEqualTo,
+    Object? isNotEqualTo,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
+    List<Object?>? arrayContainsAny,
+    List<Object?>? whereIn,
+    List<Object?>? whereNotIn,
+    bool? isNull,
+  });
+
+  SubClassQuery whereDocumentId({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+    bool? isNull,
+  });
+
+  SubClassQuery whereInstanceGetter({
+    int? isEqualTo,
+    int? isNotEqualTo,
+    int? isLessThan,
+    int? isLessThanOrEqualTo,
+    int? isGreaterThan,
+    int? isGreaterThanOrEqualTo,
+    List<int>? whereIn,
+    List<int>? whereNotIn,
+    bool? isNull,
+  });
+
+  /// Perform an order query based on a [FieldPath].
+  ///
+  /// This method is considered unsafe as it does check that the field path
+  /// maps to a valid property or that parameters such as [isEqualTo] receive
+  /// a value of the correct type.
+  ///
+  /// If possible, instead use the more explicit variant of order queries:
+  ///
+  /// **AVOID**:
+  /// ```dart
+  /// collection.orderByFieldPath(
+  ///   FieldPath.fromString('title'),
+  ///   startAt: 'title',
+  /// );
+  /// ```
+  ///
+  /// **PREFER**:
+  /// ```dart
+  /// collection.orderByTitle(startAt: 'title');
+  /// ```
+  SubClassQuery orderByFieldPath(
+    Object fieldPath, {
+    bool descending = false,
+    Object startAt,
+    Object startAfter,
+    Object endAt,
+    Object endBefore,
+    SubClassDocumentSnapshot? startAtDocument,
+    SubClassDocumentSnapshot? endAtDocument,
+    SubClassDocumentSnapshot? endBeforeDocument,
+    SubClassDocumentSnapshot? startAfterDocument,
+  });
+
+  SubClassQuery orderByDocumentId({
+    bool descending = false,
+    String startAt,
+    String startAfter,
+    String endAt,
+    String endBefore,
+    SubClassDocumentSnapshot? startAtDocument,
+    SubClassDocumentSnapshot? endAtDocument,
+    SubClassDocumentSnapshot? endBeforeDocument,
+    SubClassDocumentSnapshot? startAfterDocument,
+  });
+
+  SubClassQuery orderByInstanceGetter({
+    bool descending = false,
+    int startAt,
+    int startAfter,
+    int endAt,
+    int endBefore,
+    SubClassDocumentSnapshot? startAtDocument,
+    SubClassDocumentSnapshot? endAtDocument,
+    SubClassDocumentSnapshot? endBeforeDocument,
+    SubClassDocumentSnapshot? startAfterDocument,
+  });
+}
+
+class _$SubClassQuery extends QueryReference<SubClass, SubClassQuerySnapshot>
+    implements SubClassQuery {
+  _$SubClassQuery(
+    this._collection, {
+    required Query<SubClass> $referenceWithoutCursor,
+    $QueryCursor $queryCursor = const $QueryCursor(),
+  }) : super(
+          $referenceWithoutCursor: $referenceWithoutCursor,
+          $queryCursor: $queryCursor,
+        );
+
+  final CollectionReference<Object?> _collection;
+
+  @override
+  Stream<SubClassQuerySnapshot> snapshots([SnapshotOptions? options]) {
+    return reference.snapshots().map(SubClassQuerySnapshot._fromQuerySnapshot);
+  }
+
+  @override
+  Future<SubClassQuerySnapshot> get([GetOptions? options]) {
+    return reference
+        .get(options)
+        .then(SubClassQuerySnapshot._fromQuerySnapshot);
+  }
+
+  @override
+  SubClassQuery limit(int limit) {
+    return _$SubClassQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.limit(limit),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  @override
+  SubClassQuery limitToLast(int limit) {
+    return _$SubClassQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.limitToLast(limit),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  @override
+  SubClassQuery whereFieldPath(
+    Object fieldPath, {
+    Object? isEqualTo = _sentinel,
+    Object? isNotEqualTo = _sentinel,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
+    List<Object?>? arrayContainsAny,
+    List<Object?>? whereIn,
+    List<Object?>? whereNotIn,
+    bool? isNull,
+  }) {
+    return _$SubClassQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        fieldPath,
+        isEqualTo: isEqualTo != _sentinel ? isEqualTo : null,
+        isNotEqualTo: isNotEqualTo != _sentinel ? isNotEqualTo : null,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        arrayContains: arrayContains,
+        arrayContainsAny: arrayContainsAny,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+        isNull: isNull ??
+            (isEqualTo == null ? false : null) ??
+            (isNotEqualTo == null ? true : null),
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  @override
+  SubClassQuery whereDocumentId({
+    Object? isEqualTo = _sentinel,
+    Object? isNotEqualTo = _sentinel,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+    bool? isNull,
+  }) {
+    return _$SubClassQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        FieldPath.documentId,
+        isEqualTo: isEqualTo != _sentinel ? isEqualTo : null,
+        isNotEqualTo: isNotEqualTo != _sentinel ? isNotEqualTo : null,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+        isNull: isNull ??
+            (isEqualTo == null ? false : null) ??
+            (isNotEqualTo == null ? true : null),
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  @override
+  SubClassQuery whereInstanceGetter({
+    Object? isEqualTo = _sentinel,
+    Object? isNotEqualTo = _sentinel,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    List<int>? whereIn,
+    List<int>? whereNotIn,
+    bool? isNull,
+  }) {
+    return _$SubClassQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$SubClassFieldMap['instanceGetter']!,
+        isEqualTo: isEqualTo != _sentinel
+            ? _$SubClassPerFieldToJson.instanceGetter(isEqualTo as int)
+            : null,
+        isNotEqualTo: isNotEqualTo != _sentinel
+            ? _$SubClassPerFieldToJson.instanceGetter(isNotEqualTo as int)
+            : null,
+        isLessThan: isLessThan != null
+            ? _$SubClassPerFieldToJson.instanceGetter(isLessThan as int)
+            : null,
+        isLessThanOrEqualTo: isLessThanOrEqualTo != null
+            ? _$SubClassPerFieldToJson
+                .instanceGetter(isLessThanOrEqualTo as int)
+            : null,
+        isGreaterThan: isGreaterThan != null
+            ? _$SubClassPerFieldToJson.instanceGetter(isGreaterThan as int)
+            : null,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo != null
+            ? _$SubClassPerFieldToJson
+                .instanceGetter(isGreaterThanOrEqualTo as int)
+            : null,
+        whereIn:
+            whereIn?.map((e) => _$SubClassPerFieldToJson.instanceGetter(e)),
+        whereNotIn:
+            whereNotIn?.map((e) => _$SubClassPerFieldToJson.instanceGetter(e)),
+        isNull: isNull ??
+            (isEqualTo == null ? false : null) ??
+            (isNotEqualTo == null ? true : null),
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  @override
+  SubClassQuery orderByFieldPath(
+    Object fieldPath, {
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    SubClassDocumentSnapshot? startAtDocument,
+    SubClassDocumentSnapshot? endAtDocument,
+    SubClassDocumentSnapshot? endBeforeDocument,
+    SubClassDocumentSnapshot? startAfterDocument,
+  }) {
+    final query =
+        $referenceWithoutCursor.orderBy(fieldPath, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$SubClassQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  @override
+  SubClassQuery orderByDocumentId({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    SubClassDocumentSnapshot? startAtDocument,
+    SubClassDocumentSnapshot? endAtDocument,
+    SubClassDocumentSnapshot? endBeforeDocument,
+    SubClassDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(FieldPath.documentId,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$SubClassQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  @override
+  SubClassQuery orderByInstanceGetter({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    SubClassDocumentSnapshot? startAtDocument,
+    SubClassDocumentSnapshot? endAtDocument,
+    SubClassDocumentSnapshot? endBeforeDocument,
+    SubClassDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$SubClassFieldMap['instanceGetter']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$SubClassQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is _$SubClassQuery &&
+        other.runtimeType == runtimeType &&
+        other.reference == reference;
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, reference);
+}
+
+class SubClassDocumentSnapshot extends FirestoreDocumentSnapshot<SubClass> {
+  SubClassDocumentSnapshot._(this.snapshot) : data = snapshot.data();
+
+  @override
+  final DocumentSnapshot<SubClass> snapshot;
+
+  @override
+  SubClassDocumentReference get reference {
+    return SubClassDocumentReference(
+      snapshot.reference,
+    );
+  }
+
+  @override
+  final SubClass? data;
+}
+
+class SubClassQuerySnapshot
+    extends FirestoreQuerySnapshot<SubClass, SubClassQueryDocumentSnapshot> {
+  SubClassQuerySnapshot._(
+    this.snapshot,
+    this.docs,
+    this.docChanges,
+  );
+
+  factory SubClassQuerySnapshot._fromQuerySnapshot(
+    QuerySnapshot<SubClass> snapshot,
+  ) {
+    final docs = snapshot.docs.map(SubClassQueryDocumentSnapshot._).toList();
+
+    final docChanges = snapshot.docChanges.map((change) {
+      return _decodeDocumentChange(
+        change,
+        SubClassDocumentSnapshot._,
+      );
+    }).toList();
+
+    return SubClassQuerySnapshot._(
+      snapshot,
+      docs,
+      docChanges,
+    );
+  }
+
+  static FirestoreDocumentChange<SubClassDocumentSnapshot>
+      _decodeDocumentChange<T>(
+    DocumentChange<T> docChange,
+    SubClassDocumentSnapshot Function(DocumentSnapshot<T> doc) decodeDoc,
+  ) {
+    return FirestoreDocumentChange<SubClassDocumentSnapshot>(
+      type: docChange.type,
+      oldIndex: docChange.oldIndex,
+      newIndex: docChange.newIndex,
+      doc: decodeDoc(docChange.doc),
+    );
+  }
+
+  final QuerySnapshot<SubClass> snapshot;
+
+  @override
+  final List<SubClassQueryDocumentSnapshot> docs;
+
+  @override
+  final List<FirestoreDocumentChange<SubClassDocumentSnapshot>> docChanges;
+}
+
+class SubClassQueryDocumentSnapshot
+    extends FirestoreQueryDocumentSnapshot<SubClass>
+    implements SubClassDocumentSnapshot {
+  SubClassQueryDocumentSnapshot._(this.snapshot) : data = snapshot.data();
+
+  @override
+  final QueryDocumentSnapshot<SubClass> snapshot;
+
+  @override
+  final SubClass data;
+
+  @override
+  SubClassDocumentReference get reference {
+    return SubClassDocumentReference(snapshot.reference);
+  }
+}
+
 // **************************************************************************
 // ValidatorGenerator
 // **************************************************************************
@@ -12829,7 +15518,7 @@ void _$assertMinValidation(MinValidation instance) {
 
 IgnoredGetter _$IgnoredGetterFromJson(Map<String, dynamic> json) =>
     IgnoredGetter(
-      json['value'] as int,
+      (json['value'] as num).toInt(),
     );
 
 const _$IgnoredGetterFieldMap = <String, String>{
@@ -12873,7 +15562,7 @@ Nested _$NestedFromJson(Map<String, dynamic> json) => Nested(
       value: json['value'] == null
           ? null
           : Nested.fromJson(json['value'] as Map<String, dynamic>),
-      simple: json['simple'] as int?,
+      simple: (json['simple'] as num?)?.toInt(),
       valueList: (json['valueList'] as List<dynamic>?)
           ?.map((e) => Nested.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -12983,7 +15672,7 @@ Map<String, dynamic> _$EmptyModelToJson(EmptyModel instance) =>
 
 MinValidation _$MinValidationFromJson(Map<String, dynamic> json) =>
     MinValidation(
-      json['intNbr'] as int,
+      (json['intNbr'] as num).toInt(),
       (json['doubleNbr'] as num).toDouble(),
       json['numNbr'] as num,
     );
@@ -13013,7 +15702,7 @@ Map<String, dynamic> _$MinValidationToJson(MinValidation instance) =>
 
 Root _$RootFromJson(Map<String, dynamic> json) => Root(
       json['nonNullable'] as String,
-      json['nullable'] as int?,
+      (json['nullable'] as num?)?.toInt(),
     );
 
 const _$RootFieldMap = <String, String>{
@@ -13035,7 +15724,7 @@ Map<String, dynamic> _$RootToJson(Root instance) => <String, dynamic>{
     };
 
 OptionalJson _$OptionalJsonFromJson(Map<String, dynamic> json) => OptionalJson(
-      json['value'] as int,
+      (json['value'] as num).toInt(),
     );
 
 const _$OptionalJsonFieldMap = <String, String>{
@@ -13054,7 +15743,7 @@ Map<String, dynamic> _$OptionalJsonToJson(OptionalJson instance) =>
     };
 
 MixedJson _$MixedJsonFromJson(Map<String, dynamic> json) => MixedJson(
-      json['value'] as int,
+      (json['value'] as num).toInt(),
     );
 
 const _$MixedJsonFieldMap = <String, String>{
@@ -13073,7 +15762,7 @@ Map<String, dynamic> _$MixedJsonToJson(MixedJson instance) => <String, dynamic>{
 
 Sub _$SubFromJson(Map<String, dynamic> json) => Sub(
       json['nonNullable'] as String,
-      json['nullable'] as int?,
+      (json['nullable'] as num?)?.toInt(),
     );
 
 const _$SubFieldMap = <String, String>{
@@ -13190,4 +15879,22 @@ abstract class _$ExplicitSubPathPerFieldToJson {
 Map<String, dynamic> _$ExplicitSubPathToJson(ExplicitSubPath instance) =>
     <String, dynamic>{
       'value': instance.value,
+    };
+
+SubClass _$SubClassFromJson(Map<String, dynamic> json) => SubClass(
+      (json['instanceGetter'] as num).toInt(),
+    );
+
+const _$SubClassFieldMap = <String, String>{
+  'instanceGetter': 'instanceGetter',
+};
+
+// ignore: unused_element
+abstract class _$SubClassPerFieldToJson {
+  // ignore: unused_element
+  static Object? instanceGetter(int instance) => instance;
+}
+
+Map<String, dynamic> _$SubClassToJson(SubClass instance) => <String, dynamic>{
+      'instanceGetter': instance.instanceGetter,
     };

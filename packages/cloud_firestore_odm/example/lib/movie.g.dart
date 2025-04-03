@@ -130,6 +130,69 @@ abstract class MovieDocumentReference
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    Movie model, {
+    SetOptions? options,
+    FieldValue posterFieldValue,
+    FieldValue likesFieldValue,
+    FieldValue titleFieldValue,
+    FieldValue yearFieldValue,
+    FieldValue runtimeFieldValue,
+    FieldValue ratedFieldValue,
+    FieldValue genreFieldValue,
+    FieldValue tagsFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    Movie model, {
+    SetOptions? options,
+    FieldValue posterFieldValue,
+    FieldValue likesFieldValue,
+    FieldValue titleFieldValue,
+    FieldValue yearFieldValue,
+    FieldValue runtimeFieldValue,
+    FieldValue ratedFieldValue,
+    FieldValue genreFieldValue,
+    FieldValue tagsFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    Movie model, {
+    SetOptions? options,
+    FieldValue posterFieldValue,
+    FieldValue likesFieldValue,
+    FieldValue titleFieldValue,
+    FieldValue yearFieldValue,
+    FieldValue runtimeFieldValue,
+    FieldValue ratedFieldValue,
+    FieldValue genreFieldValue,
+    FieldValue tagsFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -158,6 +221,29 @@ abstract class MovieDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    String poster,
+    FieldValue posterFieldValue,
+    int likes,
+    FieldValue likesFieldValue,
+    String title,
+    FieldValue titleFieldValue,
+    int year,
+    FieldValue yearFieldValue,
+    String runtime,
+    FieldValue runtimeFieldValue,
+    String rated,
+    FieldValue ratedFieldValue,
+    List<String>? genre,
+    FieldValue genreFieldValue,
+    Set<String>? tags,
+    FieldValue tagsFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
     String poster,
     FieldValue posterFieldValue,
     int likes,
@@ -207,6 +293,99 @@ class _$MovieDocumentReference
   @override
   Future<MovieDocumentSnapshot> transactionGet(Transaction transaction) {
     return transaction.get(reference).then(MovieDocumentSnapshot._);
+  }
+
+  Future<void> set(
+    Movie model, {
+    SetOptions? options,
+    FieldValue? posterFieldValue,
+    FieldValue? likesFieldValue,
+    FieldValue? titleFieldValue,
+    FieldValue? yearFieldValue,
+    FieldValue? runtimeFieldValue,
+    FieldValue? ratedFieldValue,
+    FieldValue? genreFieldValue,
+    FieldValue? tagsFieldValue,
+  }) async {
+    final json = {
+      ..._$MovieToJson(model),
+      if (posterFieldValue != null)
+        _$MovieFieldMap['poster']!: posterFieldValue,
+      if (likesFieldValue != null) _$MovieFieldMap['likes']!: likesFieldValue,
+      if (titleFieldValue != null) _$MovieFieldMap['title']!: titleFieldValue,
+      if (yearFieldValue != null) _$MovieFieldMap['year']!: yearFieldValue,
+      if (runtimeFieldValue != null)
+        _$MovieFieldMap['runtime']!: runtimeFieldValue,
+      if (ratedFieldValue != null) _$MovieFieldMap['rated']!: ratedFieldValue,
+      if (genreFieldValue != null) _$MovieFieldMap['genre']!: genreFieldValue,
+      if (tagsFieldValue != null) _$MovieFieldMap['tags']!: tagsFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    Movie model, {
+    SetOptions? options,
+    FieldValue? posterFieldValue,
+    FieldValue? likesFieldValue,
+    FieldValue? titleFieldValue,
+    FieldValue? yearFieldValue,
+    FieldValue? runtimeFieldValue,
+    FieldValue? ratedFieldValue,
+    FieldValue? genreFieldValue,
+    FieldValue? tagsFieldValue,
+  }) {
+    final json = {
+      ..._$MovieToJson(model),
+      if (posterFieldValue != null)
+        _$MovieFieldMap['poster']!: posterFieldValue,
+      if (likesFieldValue != null) _$MovieFieldMap['likes']!: likesFieldValue,
+      if (titleFieldValue != null) _$MovieFieldMap['title']!: titleFieldValue,
+      if (yearFieldValue != null) _$MovieFieldMap['year']!: yearFieldValue,
+      if (runtimeFieldValue != null)
+        _$MovieFieldMap['runtime']!: runtimeFieldValue,
+      if (ratedFieldValue != null) _$MovieFieldMap['rated']!: ratedFieldValue,
+      if (genreFieldValue != null) _$MovieFieldMap['genre']!: genreFieldValue,
+      if (tagsFieldValue != null) _$MovieFieldMap['tags']!: tagsFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    Movie model, {
+    SetOptions? options,
+    FieldValue? posterFieldValue,
+    FieldValue? likesFieldValue,
+    FieldValue? titleFieldValue,
+    FieldValue? yearFieldValue,
+    FieldValue? runtimeFieldValue,
+    FieldValue? ratedFieldValue,
+    FieldValue? genreFieldValue,
+    FieldValue? tagsFieldValue,
+  }) {
+    final json = {
+      ..._$MovieToJson(model),
+      if (posterFieldValue != null)
+        _$MovieFieldMap['poster']!: posterFieldValue,
+      if (likesFieldValue != null) _$MovieFieldMap['likes']!: likesFieldValue,
+      if (titleFieldValue != null) _$MovieFieldMap['title']!: titleFieldValue,
+      if (yearFieldValue != null) _$MovieFieldMap['year']!: yearFieldValue,
+      if (runtimeFieldValue != null)
+        _$MovieFieldMap['runtime']!: runtimeFieldValue,
+      if (ratedFieldValue != null) _$MovieFieldMap['rated']!: ratedFieldValue,
+      if (genreFieldValue != null) _$MovieFieldMap['genre']!: genreFieldValue,
+      if (tagsFieldValue != null) _$MovieFieldMap['tags']!: tagsFieldValue,
+    };
+
+    batch.set(reference, json, options);
   }
 
   Future<void> update({
@@ -380,6 +559,93 @@ class _$MovieDocumentReference
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? poster = _sentinel,
+    FieldValue? posterFieldValue,
+    Object? likes = _sentinel,
+    FieldValue? likesFieldValue,
+    Object? title = _sentinel,
+    FieldValue? titleFieldValue,
+    Object? year = _sentinel,
+    FieldValue? yearFieldValue,
+    Object? runtime = _sentinel,
+    FieldValue? runtimeFieldValue,
+    Object? rated = _sentinel,
+    FieldValue? ratedFieldValue,
+    Object? genre = _sentinel,
+    FieldValue? genreFieldValue,
+    Object? tags = _sentinel,
+    FieldValue? tagsFieldValue,
+  }) {
+    assert(
+      poster == _sentinel || posterFieldValue == null,
+      "Cannot specify both poster and posterFieldValue",
+    );
+    assert(
+      likes == _sentinel || likesFieldValue == null,
+      "Cannot specify both likes and likesFieldValue",
+    );
+    assert(
+      title == _sentinel || titleFieldValue == null,
+      "Cannot specify both title and titleFieldValue",
+    );
+    assert(
+      year == _sentinel || yearFieldValue == null,
+      "Cannot specify both year and yearFieldValue",
+    );
+    assert(
+      runtime == _sentinel || runtimeFieldValue == null,
+      "Cannot specify both runtime and runtimeFieldValue",
+    );
+    assert(
+      rated == _sentinel || ratedFieldValue == null,
+      "Cannot specify both rated and ratedFieldValue",
+    );
+    assert(
+      genre == _sentinel || genreFieldValue == null,
+      "Cannot specify both genre and genreFieldValue",
+    );
+    assert(
+      tags == _sentinel || tagsFieldValue == null,
+      "Cannot specify both tags and tagsFieldValue",
+    );
+    final json = {
+      if (poster != _sentinel)
+        _$MovieFieldMap['poster']!:
+            _$MoviePerFieldToJson.poster(poster as String),
+      if (posterFieldValue != null)
+        _$MovieFieldMap['poster']!: posterFieldValue,
+      if (likes != _sentinel)
+        _$MovieFieldMap['likes']!: _$MoviePerFieldToJson.likes(likes as int),
+      if (likesFieldValue != null) _$MovieFieldMap['likes']!: likesFieldValue,
+      if (title != _sentinel)
+        _$MovieFieldMap['title']!: _$MoviePerFieldToJson.title(title as String),
+      if (titleFieldValue != null) _$MovieFieldMap['title']!: titleFieldValue,
+      if (year != _sentinel)
+        _$MovieFieldMap['year']!: _$MoviePerFieldToJson.year(year as int),
+      if (yearFieldValue != null) _$MovieFieldMap['year']!: yearFieldValue,
+      if (runtime != _sentinel)
+        _$MovieFieldMap['runtime']!:
+            _$MoviePerFieldToJson.runtime(runtime as String),
+      if (runtimeFieldValue != null)
+        _$MovieFieldMap['runtime']!: runtimeFieldValue,
+      if (rated != _sentinel)
+        _$MovieFieldMap['rated']!: _$MoviePerFieldToJson.rated(rated as String),
+      if (ratedFieldValue != null) _$MovieFieldMap['rated']!: ratedFieldValue,
+      if (genre != _sentinel)
+        _$MovieFieldMap['genre']!:
+            _$MoviePerFieldToJson.genre(genre as List<String>?),
+      if (genreFieldValue != null) _$MovieFieldMap['genre']!: genreFieldValue,
+      if (tags != _sentinel)
+        _$MovieFieldMap['tags']!:
+            _$MoviePerFieldToJson.tags(tags as Set<String>?),
+      if (tagsFieldValue != null) _$MovieFieldMap['tags']!: tagsFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override
@@ -2100,6 +2366,51 @@ abstract class CommentDocumentReference
   @override
   Future<void> delete();
 
+  /// Sets data on the document, overwriting any existing data. If the document
+  /// does not yet exist, it will be created.
+  ///
+  /// If [SetOptions] are provided, the data can be merged into an existing
+  /// document instead of overwriting.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  Future<void> set(
+    Comment model, {
+    SetOptions? options,
+    FieldValue authorNameFieldValue,
+    FieldValue messageFieldValue,
+  });
+
+  /// Writes to the document using the transaction API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void transactionSet(
+    Transaction transaction,
+    Comment model, {
+    SetOptions? options,
+    FieldValue authorNameFieldValue,
+    FieldValue messageFieldValue,
+  });
+
+  /// Writes to the document using the batch API.
+  ///
+  /// If the document does not exist yet, it will be created. If you pass
+  /// [SetOptions], the provided data can be merged into the existing document.
+  ///
+  /// Any [FieldValue]s provided will replace the corresponding fields in the
+  /// [model] during serialization.
+  void batchSet(
+    WriteBatch batch,
+    Comment model, {
+    SetOptions? options,
+    FieldValue authorNameFieldValue,
+    FieldValue messageFieldValue,
+  });
+
   /// Updates data on the document. Data will be merged with any existing
   /// document data.
   ///
@@ -2116,6 +2427,17 @@ abstract class CommentDocumentReference
   /// The update will fail if applied to a document that does not exist.
   void transactionUpdate(
     Transaction transaction, {
+    String authorName,
+    FieldValue authorNameFieldValue,
+    String message,
+    FieldValue messageFieldValue,
+  });
+
+  /// Updates fields in the current document using the batch API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void batchUpdate(
+    WriteBatch batch, {
     String authorName,
     FieldValue authorNameFieldValue,
     String message,
@@ -2154,6 +2476,63 @@ class _$CommentDocumentReference
   @override
   Future<CommentDocumentSnapshot> transactionGet(Transaction transaction) {
     return transaction.get(reference).then(CommentDocumentSnapshot._);
+  }
+
+  Future<void> set(
+    Comment model, {
+    SetOptions? options,
+    FieldValue? authorNameFieldValue,
+    FieldValue? messageFieldValue,
+  }) async {
+    final json = {
+      ..._$CommentToJson(model),
+      if (authorNameFieldValue != null)
+        _$CommentFieldMap['authorName']!: authorNameFieldValue,
+      if (messageFieldValue != null)
+        _$CommentFieldMap['message']!: messageFieldValue,
+    };
+
+    final castedReference = reference.withConverter<Map<String, dynamic>>(
+      fromFirestore: (snapshot, options) => throw UnimplementedError(),
+      toFirestore: (value, options) => value,
+    );
+    return castedReference.set(json, options);
+  }
+
+  void transactionSet(
+    Transaction transaction,
+    Comment model, {
+    SetOptions? options,
+    FieldValue? authorNameFieldValue,
+    FieldValue? messageFieldValue,
+  }) {
+    final json = {
+      ..._$CommentToJson(model),
+      if (authorNameFieldValue != null)
+        _$CommentFieldMap['authorName']!: authorNameFieldValue,
+      if (messageFieldValue != null)
+        _$CommentFieldMap['message']!: messageFieldValue,
+    };
+
+    transaction.set(reference, json, options);
+  }
+
+  void batchSet(
+    WriteBatch batch,
+    Comment model, {
+    SetOptions? options,
+    FieldValue? authorNameFieldValue,
+    FieldValue? messageFieldValue,
+  }) {
+    final json = {
+      ..._$CommentToJson(model),
+      if (authorNameFieldValue != null)
+        _$CommentFieldMap['authorName']!: authorNameFieldValue,
+      if (messageFieldValue != null)
+        _$CommentFieldMap['message']!: messageFieldValue,
+    };
+
+    batch.set(reference, json, options);
   }
 
   Future<void> update({
@@ -2215,6 +2594,37 @@ class _$CommentDocumentReference
     };
 
     transaction.update(reference, json);
+  }
+
+  void batchUpdate(
+    WriteBatch batch, {
+    Object? authorName = _sentinel,
+    FieldValue? authorNameFieldValue,
+    Object? message = _sentinel,
+    FieldValue? messageFieldValue,
+  }) {
+    assert(
+      authorName == _sentinel || authorNameFieldValue == null,
+      "Cannot specify both authorName and authorNameFieldValue",
+    );
+    assert(
+      message == _sentinel || messageFieldValue == null,
+      "Cannot specify both message and messageFieldValue",
+    );
+    final json = {
+      if (authorName != _sentinel)
+        _$CommentFieldMap['authorName']!:
+            _$CommentPerFieldToJson.authorName(authorName as String),
+      if (authorNameFieldValue != null)
+        _$CommentFieldMap['authorName']!: authorNameFieldValue,
+      if (message != _sentinel)
+        _$CommentFieldMap['message']!:
+            _$CommentPerFieldToJson.message(message as String),
+      if (messageFieldValue != null)
+        _$CommentFieldMap['message']!: messageFieldValue,
+    };
+
+    batch.update(reference, json);
   }
 
   @override
@@ -2979,12 +3389,12 @@ Movie _$MovieFromJson(Map<String, dynamic> json) => Movie(
       genre:
           (json['genre'] as List<dynamic>?)?.map((e) => e as String).toList(),
       tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toSet(),
-      likes: json['likes'] as int,
+      likes: (json['likes'] as num).toInt(),
       poster: json['poster'] as String,
       rated: json['rated'] as String,
       runtime: json['runtime'] as String,
       title: json['title'] as String,
-      year: json['year'] as int,
+      year: (json['year'] as num).toInt(),
       id: json['id'] as String,
     );
 
